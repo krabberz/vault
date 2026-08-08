@@ -35,7 +35,7 @@
             color: var(--silver-main);
             font-family: var(--font-mono);
             padding: 2.5rem;
-            max-width: 950px;
+            max-width: 1100px;
             margin: 0 auto;
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
@@ -197,40 +197,79 @@
             background: rgba(0, 240, 255, 0.03);
         }
 
-        .track-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        /* 2-column grid layout */
+        .track-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .track-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .track-card {
             background: var(--panel-bg);
             border: 1px solid var(--panel-border);
             padding: 1.2rem;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            justify-content: space-between;
+        }
+
+        /* Hero Artwork Container */
+        .cover-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border: 1px solid var(--panel-border);
+            background: var(--bg-void);
+            position: relative;
+        }
+
+        .track-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .track-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
             align-items: center;
+            justify-content: center;
+            color: var(--silver-dim);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.03) 0%, rgba(5, 6, 8, 1) 100%);
         }
 
         .track-info {
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
+            width: 100%;
         }
 
         .track-header {
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.8rem;
         }
 
         .track-title {
             font-family: var(--font-head);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: var(--silver-bright);
             letter-spacing: 0.5px;
+            word-break: break-word;
         }
 
         .status-badge {
@@ -243,6 +282,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
+            white-space: nowrap;
         }
 
         .badge-private {
@@ -279,9 +319,18 @@
         .track-actions {
             display: flex;
             gap: 0.6rem;
+            margin-top: 0.2rem;
+        }
+
+        .track-actions .btn {
+            flex: 1;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            text-align: center;
         }
 
         .empty-state {
+            grid-column: 1 / -1;
             text-align: center;
             padding: 4rem 2rem;
             border: 1px dashed var(--panel-border);
@@ -354,6 +403,10 @@
                 <label for="audioFile">// audio file //</label>
                 <input type="file" id="audioFile" accept="audio/*" required>
             </div>
+            <div class="form-group">
+                <label for="imageFile">// cover image (optional) //</label>
+                <input type="file" id="imageFile" accept="image/*">
+            </div>
             <div style="display: flex; justify-content: flex-end; gap: 0.8rem;">
                 <button type="button" class="btn" onclick="toggleUploadDrawer()">// cancel //</button>
                 <button type="submit" class="btn btn-cyan">// upload //</button>
@@ -367,7 +420,7 @@
         <button id="tab-private" class="tab" onclick="setFilter('private')" style="display: none;">// private // (<span id="count-private">0</span>)</button>
     </div>
 
-    <main id="trackList" class="track-list">
+    <main id="trackList" class="track-grid">
     </main>
 
     <div id="loginModal" class="modal-overlay">
@@ -392,7 +445,6 @@
     </div>
 
     <script>
-        
         const CREDENTIALS = {
             userHash: "4c3b3284e206c3db72440736cfdbd185f0e61a3c7fd9f049987196b987d3d1ee",
             passHash: "4107288f0b60f2a3cad009e8164af48d39ba6855a3388e5e6858364e14c2fdff"
@@ -401,6 +453,7 @@
         let db;
         let activeFilter = 'all';
         let audioObjectURLs = {};
+        let imageObjectURLs = {};
         let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
 
         const request = indexedDB.open("MusicVaultDB", 1);
@@ -492,15 +545,19 @@
             if (!isLoggedIn) return;
 
             const title = document.getElementById('title').value;
-            const fileInput = document.getElementById('audioFile');
-            const file = fileInput.files[0];
+            const audioFileInput = document.getElementById('audioFile');
+            const imageFileInput = document.getElementById('imageFile');
+            
+            const audioFile = audioFileInput.files[0];
+            const imageFile = imageFileInput.files[0] || null;
 
-            if (!file) return;
+            if (!audioFile) return;
 
             const newTrack = {
                 id: Date.now(),
                 title: title,
-                fileBlob: file,
+                fileBlob: audioFile,
+                imageBlob: imageFile,
                 isPublic: false,
                 timestamp: new Date().toISOString().split('T')[0]
             };
@@ -549,6 +606,10 @@
                         URL.revokeObjectURL(audioObjectURLs[id]);
                         delete audioObjectURLs[id];
                     }
+                    if (imageObjectURLs[id]) {
+                        URL.revokeObjectURL(imageObjectURLs[id]);
+                        delete imageObjectURLs[id];
+                    }
                     loadAndRender();
                 };
             }
@@ -570,7 +631,7 @@
 
             const tx = db.transaction("tracks", "readonly");
             const store = tx.objectStore("tracks");
-            const getAllReq = store.getAll();
+            getAllReq = store.getAll();
 
             getAllReq.onsuccess = () => {
                 const tracks = getAllReq.result || [];
@@ -594,7 +655,7 @@
             const trackList = document.getElementById('trackList');
 
             if (filtered.length === 0) {
-                trackList.innerHTML = `<div class="empty-state">// NO AUDIO DATA DETECTED IN THIS INDEX //</div>`;
+                trackList.innerHTML = `<div class="empty-state">// NO DATA DETECTED IN THIS INDEX //</div>`;
                 return;
             }
 
@@ -603,8 +664,19 @@
                     audioObjectURLs[track.id] = URL.createObjectURL(track.fileBlob);
                 }
 
+                let coverHtml = `<div class="track-cover-placeholder">// NO_ARTWORK //</div>`;
+                if (track.imageBlob) {
+                    if (!imageObjectURLs[track.id]) {
+                        imageObjectURLs[track.id] = URL.createObjectURL(track.imageBlob);
+                    }
+                    coverHtml = `<img src="${imageObjectURLs[track.id]}" class="track-cover" alt="Cover Art">`;
+                }
+
                 return `
                     <div class="track-card">
+                        <div class="cover-wrapper">
+                            ${coverHtml}
+                        </div>
                         <div class="track-info">
                             <div class="track-header">
                                 <span class="track-title">${escapeHtml(track.title)}</span>
