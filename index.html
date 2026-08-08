@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[VAULT // MUSIC ARCHIVE]</title>
+    <title>[the vault]</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -290,7 +290,6 @@
             letter-spacing: 1px;
         }
 
-        /* Modal Overlay */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -369,10 +368,8 @@
     </div>
 
     <main id="trackList" class="track-list">
-        <!-- Tracks dynamically mounted here -->
     </main>
 
-    <!-- Login Modal -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal">
             <h2 class="modal-title">// AUTHENTICATE //</h2>
@@ -406,7 +403,6 @@
         let audioObjectURLs = {};
         let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
 
-        // Setup IndexedDB
         const request = indexedDB.open("MusicVaultDB", 1);
 
         request.onupgradeneeded = (e) => {
@@ -491,7 +487,6 @@
             document.getElementById('uploadDrawer').classList.toggle('active');
         }
 
-        // Upload new track
         document.getElementById('trackForm').addEventListener('submit', (e) => {
             e.preventDefault();
             if (!isLoggedIn) return;
@@ -521,7 +516,6 @@
             };
         });
 
-        // Toggle Public / Private
         function toggleVisibility(id) {
             if (!isLoggedIn) return;
 
@@ -542,7 +536,6 @@
             };
         }
 
-        // Purge Track
         function deleteTrack(id) {
             if (!isLoggedIn) return;
 
@@ -572,7 +565,6 @@
             document.getElementById(`tab-${activeFilter}`).classList.add('active');
         }
 
-        // Fetch from DB and re-render
         function loadAndRender() {
             if (!db) return;
 
@@ -587,15 +579,12 @@
         }
 
         function renderUI(tracks) {
-            // Filter by Auth status first
             const visibleTracks = tracks.filter(t => isLoggedIn || t.isPublic);
 
-            // Update Counts
             document.getElementById('count-all').textContent = visibleTracks.length;
             document.getElementById('count-public').textContent = tracks.filter(t => t.isPublic).length;
             document.getElementById('count-private').textContent = tracks.filter(t => !t.isPublic).length;
 
-            // Filter by selected Tab
             const filtered = visibleTracks.filter(t => {
                 if (activeFilter === 'public') return t.isPublic;
                 if (activeFilter === 'private') return !t.isPublic;
