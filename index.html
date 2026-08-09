@@ -969,17 +969,17 @@
             const displayDate = track.trackDate ? track.trackDate : "UNKNOWN";
 
             // der taggenberg
-            let tagsHtml = '';
-            if (track.tags) {
-                const { producer, artist, genre } = track.tags;
-                tagsHtml = `
-                    <div class="track-tags" style="display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap;">
-                        ${prodtag ? `<span class="tag tag-artist" style="font-size:0.75rem; background:rgba(0,240,255,0.1); color:#00f0ff; border:1px solid #00f0ff; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(artist)}')">👤 ${escapeHtml(artist)}</span>` : ''}
-                        ${producer ? `<span class="tag tag-producer" style="font-size:0.75rem; background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid #ff9900; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(producer)}')">🎹 ${escapeHtml(producer)}</span>` : ''}
-                        ${genre ? `<span class="tag tag-genre" style="font-size:0.75rem; background:rgba(0,255,102,0.1); color:#00ff66; border:1px solid #00ff66; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(genre)}')">🎵 ${escapeHtml(genre)}</span>` : ''}
-                    </div>
-                `;
-            }
+                let tagsHtml = '';
+                if (track.tags) {
+                    const { producer, artist, genre } = track.tags;
+                    tagsHtml = `
+                        <div class="track-tags" style="display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap;">
+                            ${artist ? `<span class="tag tag-artist" style="font-size:0.75rem; background:rgba(0,240,255,0.1); color:#00f0ff; border:1px solid #00f0ff; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(artist)}')">👤 ${escapeHtml(artist)}</span>` : ''}
+                            ${producer ? `<span class="tag tag-producer" style="font-size:0.75rem; background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid #ff9900; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(producer)}')">🎹 ${escapeHtml(producer)}</span>` : ''}
+                            ${genre ? `<span class="tag tag-genre" style="font-size:0.75rem; background:rgba(0,255,102,0.1); color:#00ff66; border:1px solid #00ff66; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="filterByTag('${escapeHtml(genre)}')">🎵 ${escapeHtml(genre)}</span>` : ''}
+                        </div>
+                    `;
+                }
 
             return `
                 <div class="track-card">
