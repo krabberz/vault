@@ -637,470 +637,334 @@
         </div>
     </div>
 
-    <script>
+<script>
 
-        const CREDENTIALS = {
-            userHash: "4c3b3284e206c3db72440736cfdbd185f0e61a3c7fd9f049987196b987d3d1ee",
-            passHash: "4107288f0b60f2a3cad009e8164af48d39ba6855a3388e5e6858364e14c2fdff"
+    // 1. YOUR TRACK MANIFEST (Static Repository Links)
+    const vaultTracks = [
+        { id: 1, title: "GOSTO DO SABOR", audioSrc: "./audio/GOSTO DO SABOR.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 2, title: "NÃO FUNCIONA", audioSrc: "./audio/NÃO FUNCIONA.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 3, title: "Project 17 alt", audioSrc: "./audio/Project_17 alt.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 4, title: "Project 17", audioSrc: "./audio/Project_17.mp3", imageSrc: "./images/project 17.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 5, title: "Project 4", audioSrc: "./audio/Project_4.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 6, title: "begin", audioSrc: "./audio/begin.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 7, title: "blommor", audioSrc: "./audio/blommor. 2023-07-13 21-31-02 (online-audio-converter.com) (1).mp3", imageSrc: "./images/blommorcover2.jpg", trackDate: "2023-07-13", notes: "", isPublic: false },
+        { id: 8, title: "bubble 808", audioSrc: "./audio/bubble 808.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 9, title: "dj toenail typebeat 1", audioSrc: "./audio/dj_toenail_typebeat_1.mp3", imageSrc: "./images/dj toenail.png", trackDate: "", notes: "", isPublic: false },
+        { id: 10, title: "en tanke", audioSrc: "./audio/en tanke.mp3", imageSrc: "./images/en tanke.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 11, title: "end", audioSrc: "./audio/end.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 12, title: "exorcism1", audioSrc: "./audio/exorcism1.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 13, title: "forest maze remix", audioSrc: "./audio/forest maze remix.wav", imageSrc: "./images/btfmr.png", trackDate: "", notes: "", isPublic: false },
+        { id: 14, title: "funkalicious bassline", audioSrc: "./audio/funkalicious bassline.wav", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 15, title: "graverobber", audioSrc: "./audio/graverobber.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 16, title: "headlights", audioSrc: "./audio/headlights.wav", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 17, title: "hjyu", audioSrc: "./audio/hjyu.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 18, title: "james", audioSrc: "./audio/james.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 19, title: "john grog mctuck", audioSrc: "./audio/john grog mctuck.wav", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 20, title: "loaf", audioSrc: "./audio/loaf.mp3", imageSrc: "./images/brod.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 21, title: "lofirap", audioSrc: "./audio/lofirap.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 22, title: "middo", audioSrc: "./audio/middo.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 23, title: "moon", audioSrc: "./audio/moon.mp3", imageSrc: "./images/talamod.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 24, title: "neon", audioSrc: "./audio/neon.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 25, title: "nevermetyoupiano 129", audioSrc: "./audio/nevermetyoupiano_129.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 26, title: "nevermetyoupiano 157", audioSrc: "./audio/nevermetyoupiano_157.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 27, title: "oligarchy anthem", audioSrc: "./audio/oligarchy_anthem.mp3.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 28, title: "our way", audioSrc: "./audio/our way.mp3", imageSrc: "./images/talamod.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 29, title: "pink refrigerator", audioSrc: "./audio/pink refrigerator.wav", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 30, title: "presidentialmatters beat", audioSrc: "./audio/presidentialmatters_beat.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 31, title: "provincial", audioSrc: "./audio/provincial.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 32, title: "rapport backup", audioSrc: "./audio/rapport_backup.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 33, title: "texas dlc theme song", audioSrc: "./audio/texas dlc theme song.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 34, title: "thebadending", audioSrc: "./audio/thebadending (goodending real is in backups if youre not me dont mind this).mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 35, title: "thegoodending", audioSrc: "./audio/thegoodending.wav", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 36, title: "thrillville", audioSrc: "./audio/thrillville.mp3", imageSrc: "./images/thrillville.png", trackDate: "", notes: "", isPublic: false },
+        { id: 37, title: "untitled", audioSrc: "./audio/untitled.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 38, title: "w", audioSrc: "./audio/w.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 39, title: "waterspace", audioSrc: "./audio/waterspace.mp3", imageSrc: "./images/talamod.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 40, title: "wd", audioSrc: "./audio/wd.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 41, title: "we come in peace (slowed + reverb)", audioSrc: "./audio/we come in peace 👽 (slowed + reverb).mp3", imageSrc: "./images/wcip.png", trackDate: "", notes: "", isPublic: false },
+        { id: 42, title: "we come in peace", audioSrc: "./audio/we come in peace 👽.mp3", imageSrc: "./images/wcip.png", trackDate: "", notes: "", isPublic: false },
+        { id: 43, title: "yellow grass", audioSrc: "./audio/yellow grass.mp3", imageSrc: "./images/talamod.jpg", trackDate: "", notes: "", isPublic: false },
+        { id: 44, title: "yo ethan rap on this", audioSrc: "./audio/yo ethan rap on this.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false },
+        { id: 45, title: "zebra man", audioSrc: "./audio/zebra man.mp3", imageSrc: "", trackDate: "", notes: "", isPublic: false }
+    ];
+
+    const CREDENTIALS = {
+        userHash: "4c3b3284e206c3db72440736cfdbd185f0e61a3c7fd9f049987196b987d3d1ee",
+        passHash: "4107288f0b60f2a3cad009e8164af48d39ba6855a3388e5e6858364e14c2fdff"
+    };
+
+    let activeFilter = 'all';
+    let activeSort = 'date-desc';
+    let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
+
+    // Initialize UI on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        updateAuthStateUI();
+        loadAndRender();
+        checkLarryEasterEgg();
+    });
+
+    function checkLarryEasterEgg() {
+        const roll = Math.floor(Math.random() * 100);
+        if (roll === 0) {
+            document.body.classList.add('larry-tint');
+            initLarryBouncer();
+        }
+    }
+
+    function initLarryBouncer() {
+        const larry = document.createElement('div');
+        larry.id = 'larry-bouncer';
+        
+        const img = document.createElement('img');
+        img.src = 'larry.gif';
+        img.alt = 'Larry';
+        img.onerror = () => {
+            larry.style.display = 'flex';
+            larry.style.alignItems = 'center';
+            larry.style.justifyContent = 'center';
+            larry.style.color = '#00ff66';
+            larry.style.fontFamily = 'var(--font-head)';
+            larry.textContent = '// LARRY.GIF //';
         };
 
-        let db;
-        let activeFilter = 'all';
-        let activeSort = 'date-desc';
-        let audioObjectURLs = {};
-        let imageObjectURLs = {};
-        let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
+        larry.appendChild(img);
+        document.body.appendChild(larry);
 
-        const request = indexedDB.open("MusicVaultDB", 1);
+        const width = 320;
+        const height = 240;
+        let posX = Math.random() * (window.innerWidth - width);
+        let posY = Math.random() * (window.innerHeight - height);
+        let vx = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5);
+        let vy = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5);
 
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            if (!db.objectStoreNames.contains("tracks")) {
-                db.createObjectStore("tracks", { keyPath: "id" });
-            }
-        };
+        const colors = ['#00ff66', '#00f0ff', '#ff9900', '#ff3366', '#cc00ff', '#ffff00'];
 
-        request.onsuccess = (e) => {
-            db = e.target.result;
-            updateAuthStateUI();
-            loadAndRender();
-            checkLarryEasterEgg();
-        };
-
-        function checkLarryEasterEgg() {
-            const roll = Math.floor(Math.random() * 100);
-            if (roll === 0) {
-                document.body.classList.add('larry-tint');
-                initLarryBouncer();
-            }
+        function changeBorderColor() {
+            const nextColor = colors[Math.floor(Math.random() * colors.length)];
+            larry.style.borderColor = nextColor;
         }
 
-        function initLarryBouncer() {
-            const larry = document.createElement('div');
-            larry.id = 'larry-bouncer';
-            
-            const img = document.createElement('img');
-            img.src = 'larry.gif';
-            img.alt = 'Larry';
-            img.onerror = () => {
-                larry.style.display = 'flex';
-                larry.style.alignItems = 'center';
-                larry.style.justifyContent = 'center';
-                larry.style.color = '#00ff66';
-                larry.style.fontFamily = 'var(--font-head)';
-                larry.textContent = '// LARRY.GIF //';
-            };
+        function animate() {
+            const maxX = window.innerWidth - width;
+            const maxY = window.innerHeight - height;
 
-            larry.appendChild(img);
-            document.body.appendChild(larry);
+            posX += vx;
+            posY += vy;
 
-            const width = 320;
-            const height = 240;
-            let posX = Math.random() * (window.innerWidth - width);
-            let posY = Math.random() * (window.innerHeight - height);
-            let vx = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5);
-            let vy = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5);
+            let hit = false;
 
-            const colors = ['#00ff66', '#00f0ff', '#ff9900', '#ff3366', '#cc00ff', '#ffff00'];
-
-            function changeBorderColor() {
-                const nextColor = colors[Math.floor(Math.random() * colors.length)];
-                larry.style.borderColor = nextColor;
+            if (posX <= 0) {
+                posX = 0;
+                vx *= -1;
+                hit = true;
+            } else if (posX >= maxX) {
+                posX = maxX;
+                vx *= -1;
+                hit = true;
             }
 
-            function animate() {
-                const maxX = window.innerWidth - width;
-                const maxY = window.innerHeight - height;
-
-                posX += vx;
-                posY += vy;
-
-                let hit = false;
-
-                if (posX <= 0) {
-                    posX = 0;
-                    vx *= -1;
-                    hit = true;
-                } else if (posX >= maxX) {
-                    posX = maxX;
-                    vx *= -1;
-                    hit = true;
-                }
-
-                if (posY <= 0) {
-                    posY = 0;
-                    vy *= -1;
-                    hit = true;
-                } else if (posY >= maxY) {
-                    posY = maxY;
-                    vy *= -1;
-                    hit = true;
-                }
-
-                if (hit) {
-                    changeBorderColor();
-                }
-
-                larry.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
-                requestAnimationFrame(animate);
+            if (posY <= 0) {
+                posY = 0;
+                vy *= -1;
+                hit = true;
+            } else if (posY >= maxY) {
+                posY = maxY;
+                vy *= -1;
+                hit = true;
             }
 
-            window.addEventListener('resize', () => {
-                posX = Math.min(posX, window.innerWidth - width);
-                posY = Math.min(posY, window.innerHeight - height);
-            });
+            if (hit) {
+                changeBorderColor();
+            }
 
+            larry.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
             requestAnimationFrame(animate);
         }
 
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        function updateAuthStateUI() {
-            const userTag = document.getElementById('userTag');
-            const authBtn = document.getElementById('authBtn');
-            const addTrackBtn = document.getElementById('addTrackBtn');
-            const privateTab = document.getElementById('tab-private');
-
-            if (isLoggedIn) {
-                userTag.textContent = "// admin: mk //";
-                authBtn.textContent = "// logout //";
-                addTrackBtn.style.display = "block";
-                privateTab.style.display = "block";
-            } else {
-                userTag.textContent = "// guest //";
-                authBtn.textContent = "// login //";
-                addTrackBtn.style.display = "none";
-                privateTab.style.display = "none";
-                if (activeFilter === 'private') {
-                    setFilter('all');
-                }
-            }
-        }
-
-        function handleAuthAction() {
-            if (isLoggedIn) {
-                sessionStorage.removeItem('vault_auth');
-                isLoggedIn = false;
-                updateAuthStateUI();
-                loadAndRender();
-            } else {
-                document.getElementById('loginModal').classList.add('active');
-            }
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('loginForm').reset();
-            document.getElementById('loginError').style.display = 'none';
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const userVal = document.getElementById('username').value;
-            const passVal = document.getElementById('password').value;
-
-            const userHashed = await sha256(userVal);
-            const passHashed = await sha256(passVal);
-
-            if (userHashed === CREDENTIALS.userHash && passHashed === CREDENTIALS.passHash) {
-                sessionStorage.setItem('vault_auth', 'true');
-                isLoggedIn = true;
-                closeLoginModal();
-                updateAuthStateUI();
-                loadAndRender();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-            }
+        window.addEventListener('resize', () => {
+            posX = Math.min(posX, window.innerWidth - width);
+            posY = Math.min(posY, window.innerHeight - height);
         });
 
-        function toggleUploadDrawer() {
-            document.getElementById('uploadDrawer').classList.toggle('active');
-        }
+        requestAnimationFrame(animate);
+    }
 
-        document.getElementById('trackForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!isLoggedIn) return;
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-            const title = document.getElementById('title').value;
-            const customDate = document.getElementById('trackDate').value;
-            const notes = document.getElementById('trackNotes').value;
-            const audioFileInput = document.getElementById('audioFile');
-            const imageFileInput = document.getElementById('imageFile');
-            
-            const audioFile = audioFileInput.files[0];
-            const imageFile = imageFileInput.files[0] || null;
+    function updateAuthStateUI() {
+        const userTag = document.getElementById('userTag');
+        const authBtn = document.getElementById('authBtn');
+        const privateTab = document.getElementById('tab-private');
 
-            if (!audioFile) return;
-
-            const newTrack = {
-                id: Date.now(),
-                title: title,
-                trackDate: customDate || new Date().toISOString().split('T')[0],
-                notes: notes || '',
-                fileBlob: audioFile,
-                imageBlob: imageFile,
-                isPublic: false,
-                timestamp: new Date().toISOString().split('T')[0]
-            };
-
-            const tx = db.transaction("tracks", "readwrite");
-            const store = tx.objectStore("tracks");
-            store.add(newTrack);
-
-            tx.oncomplete = () => {
-                document.getElementById('trackForm').reset();
-                toggleUploadDrawer();
-                loadAndRender();
-            };
-        });
-
-        function openEditModal(id) {
-            if (!isLoggedIn) return;
-
-            const tx = db.transaction("tracks", "readonly");
-            const store = tx.objectStore("tracks");
-            const getReq = store.get(id);
-
-            getReq.onsuccess = () => {
-                const track = getReq.result;
-                if (track) {
-                    document.getElementById('editTrackId').value = track.id;
-                    document.getElementById('editTitle').value = track.title || '';
-                    document.getElementById('editTrackDate').value = track.trackDate || '';
-                    document.getElementById('editNotes').value = track.notes || '';
-                    document.getElementById('editAudioFile').value = '';
-                    document.getElementById('editImageFile').value = '';
-
-                    document.getElementById('editModal').classList.add('active');
-                }
-            };
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
-            document.getElementById('editForm').reset();
-        }
-
-        document.getElementById('editForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!isLoggedIn) return;
-
-            const trackId = parseInt(document.getElementById('editTrackId').value, 10);
-            if (!trackId) return;
-
-            const tx = db.transaction("tracks", "readwrite");
-            const store = tx.objectStore("tracks");
-            const getReq = store.get(trackId);
-
-            getReq.onsuccess = () => {
-                const track = getReq.result;
-                if (!track) return;
-
-                track.title = document.getElementById('editTitle').value;
-                track.trackDate = document.getElementById('editTrackDate').value || new Date().toISOString().split('T')[0];
-                track.notes = document.getElementById('editNotes').value;
-
-                const newAudio = document.getElementById('editAudioFile').files[0];
-                const newImage = document.getElementById('editImageFile').files[0];
-
-                if (newAudio) {
-                    track.fileBlob = newAudio;
-                    if (audioObjectURLs[trackId]) {
-                        URL.revokeObjectURL(audioObjectURLs[trackId]);
-                        delete audioObjectURLs[trackId];
-                    }
-                }
-
-                if (newImage) {
-                    track.imageBlob = newImage;
-                    if (imageObjectURLs[trackId]) {
-                        URL.revokeObjectURL(imageObjectURLs[trackId]);
-                        delete imageObjectURLs[trackId];
-                    }
-                }
-
-                store.put(track);
-            };
-
-            tx.oncomplete = () => {
-                closeEditModal();
-                loadAndRender();
-            };
-        });
-
-        function toggleVisibility(id) {
-            if (!isLoggedIn) return;
-
-            const tx = db.transaction("tracks", "readwrite");
-            const store = tx.objectStore("tracks");
-            const getReq = store.get(id);
-
-            getReq.onsuccess = () => {
-                const track = getReq.result;
-                if (track) {
-                    track.isPublic = !track.isPublic;
-                    store.put(track);
-                }
-            };
-
-            tx.oncomplete = () => {
-                loadAndRender();
-            };
-        }
-
-        function deleteTrack(id) {
-            if (!isLoggedIn) return;
-
-            if (confirm("Delete track from vault? This action cannot be undone.")) {
-                const tx = db.transaction("tracks", "readwrite");
-                const store = tx.objectStore("tracks");
-                store.delete(id);
-
-                tx.oncomplete = () => {
-                    if (audioObjectURLs[id]) {
-                        URL.revokeObjectURL(audioObjectURLs[id]);
-                        delete audioObjectURLs[id];
-                    }
-                    if (imageObjectURLs[id]) {
-                        URL.revokeObjectURL(imageObjectURLs[id]);
-                        delete imageObjectURLs[id];
-                    }
-                    loadAndRender();
-                };
+        if (isLoggedIn) {
+            userTag.textContent = "// admin: mk //";
+            authBtn.textContent = "// logout //";
+            privateTab.style.display = "block";
+        } else {
+            userTag.textContent = "// guest //";
+            authBtn.textContent = "// login //";
+            privateTab.style.display = "none";
+            if (activeFilter === 'private') {
+                setFilter('all');
             }
         }
+    }
 
-        function setFilter(filter) {
-            activeFilter = filter;
-            updateTabStyles();
+    function handleAuthAction() {
+        if (isLoggedIn) {
+            sessionStorage.removeItem('vault_auth');
+            isLoggedIn = false;
+            updateAuthStateUI();
+            loadAndRender();
+        } else {
+            document.getElementById('loginModal').classList.add('active');
+        }
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('loginForm').reset();
+        document.getElementById('loginError').style.display = 'none';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userVal = document.getElementById('username').value;
+        const passVal = document.getElementById('password').value;
+
+        const userHashed = await sha256(userVal);
+        const passHashed = await sha256(passVal);
+
+        if (userHashed === CREDENTIALS.userHash && passHashed === CREDENTIALS.passHash) {
+            sessionStorage.setItem('vault_auth', 'true');
+            isLoggedIn = true;
+            closeLoginModal();
+            updateAuthStateUI();
+            loadAndRender();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    });
+
+    function toggleVisibility(id) {
+        if (!isLoggedIn) return;
+        const track = vaultTracks.find(t => t.id === id);
+        if (track) {
+            track.isPublic = !track.isPublic;
             loadAndRender();
         }
+    }
 
-        function setSort(sortOption) {
-            activeSort = sortOption;
-            loadAndRender();
+    function setFilter(filter) {
+        activeFilter = filter;
+        updateTabStyles();
+        loadAndRender();
+    }
+
+    function setSort(sortOption) {
+        activeSort = sortOption;
+        loadAndRender();
+    }
+
+    function updateTabStyles() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(`tab-${activeFilter}`).classList.add('active');
+    }
+
+    function loadAndRender() {
+        renderUI(vaultTracks);
+    }
+
+    function sortTracks(tracks, sortMode) {
+        return [...tracks].sort((a, b) => {
+            const titleA = (a.title || '').toLowerCase();
+            const titleB = (b.title || '').toLowerCase();
+            const dateA = a.trackDate || '';
+            const dateB = b.trackDate || '';
+
+            switch (sortMode) {
+                case 'name-asc':
+                    return titleA.localeCompare(titleB);
+                case 'name-desc':
+                    return titleB.localeCompare(titleA);
+                case 'date-asc':
+                    return dateA.localeCompare(dateB) || a.id - b.id;
+                case 'date-desc':
+                default:
+                    return dateB.localeCompare(dateA) || b.id - a.id;
+            }
+        });
+    }
+
+    function renderUI(tracks) {
+        const visibleTracks = tracks.filter(t => isLoggedIn || t.isPublic);
+
+        document.getElementById('count-all').textContent = visibleTracks.length;
+        document.getElementById('count-public').textContent = tracks.filter(t => t.isPublic).length;
+        document.getElementById('count-private').textContent = tracks.filter(t => !t.isPublic).length;
+
+        const filtered = visibleTracks.filter(t => {
+            if (activeFilter === 'public') return t.isPublic;
+            if (activeFilter === 'private') return !t.isPublic;
+            return true;
+        });
+
+        const sorted = sortTracks(filtered, activeSort);
+        const trackList = document.getElementById('trackList');
+
+        if (sorted.length === 0) {
+            trackList.innerHTML = `<div class="empty-state">// NO DATA DETECTED IN THIS INDEX //</div>`;
+            return;
         }
 
-        function updateTabStyles() {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(`tab-${activeFilter}`).classList.add('active');
-        }
-
-        function loadAndRender() {
-            if (!db) return;
-
-            const tx = db.transaction("tracks", "readonly");
-            const store = tx.objectStore("tracks");
-            const getAllReq = store.getAll();
-
-            getAllReq.onsuccess = () => {
-                const tracks = getAllReq.result || [];
-                renderUI(tracks);
-            };
-        }
-
-        function sortTracks(tracks, sortMode) {
-            return tracks.sort((a, b) => {
-                const titleA = (a.title || '').toLowerCase();
-                const titleB = (b.title || '').toLowerCase();
-                const dateA = a.trackDate || a.timestamp || '';
-                const dateB = b.trackDate || b.timestamp || '';
-
-                switch (sortMode) {
-                    case 'name-asc':
-                        return titleA.localeCompare(titleB);
-                    case 'name-desc':
-                        return titleB.localeCompare(titleA);
-                    case 'date-asc':
-                        return dateA.localeCompare(dateB) || a.id - b.id;
-                    case 'date-desc':
-                    default:
-                        return dateB.localeCompare(dateA) || b.id - a.id;
-                }
-            });
-        }
-
-        function renderUI(tracks) {
-            const visibleTracks = tracks.filter(t => isLoggedIn || t.isPublic);
-
-            document.getElementById('count-all').textContent = visibleTracks.length;
-            document.getElementById('count-public').textContent = tracks.filter(t => t.isPublic).length;
-            document.getElementById('count-private').textContent = tracks.filter(t => !t.isPublic).length;
-
-            const filtered = visibleTracks.filter(t => {
-                if (activeFilter === 'public') return t.isPublic;
-                if (activeFilter === 'private') return !t.isPublic;
-                return true;
-            });
-
-            const sorted = sortTracks(filtered, activeSort);
-            const trackList = document.getElementById('trackList');
-
-            if (sorted.length === 0) {
-                trackList.innerHTML = `<div class="empty-state">// NO DATA DETECTED IN THIS INDEX //</div>`;
-                return;
+        trackList.innerHTML = sorted.map(track => {
+            let coverHtml = `<div class="track-cover-placeholder">// NO_ARTWORK //</div>`;
+            if (track.imageSrc) {
+                coverHtml = `<img src="${track.imageSrc}" class="track-cover" alt="Cover Art" onerror="this.outerHTML='<div class=\\'track-cover-placeholder\\'>// NO_ARTWORK //</div>';">`;
             }
 
-            trackList.innerHTML = sorted.map(track => {
-                if (!audioObjectURLs[track.id]) {
-                    audioObjectURLs[track.id] = URL.createObjectURL(track.fileBlob);
-                }
+            const displayDate = track.trackDate ? track.trackDate : "UNKNOWN";
 
-                let coverHtml = `<div class="track-cover-placeholder">// NO_ARTWORK //</div>`;
-                if (track.imageBlob) {
-                    if (!imageObjectURLs[track.id]) {
-                        imageObjectURLs[track.id] = URL.createObjectURL(track.imageBlob);
-                    }
-                    coverHtml = `<img src="${imageObjectURLs[track.id]}" class="track-cover" alt="Cover Art">`;
-                }
-
-                const displayDate = track.trackDate || track.timestamp;
-
-                return `
-                    <div class="track-card">
-                        <div class="cover-wrapper">
-                            ${coverHtml}
-                        </div>
-                        <div class="track-info">
-                            <div class="track-header">
-                                <div>
-                                    <div class="track-title">${escapeHtml(track.title)}</div>
-                                    <div class="track-date">// DATE: ${escapeHtml(displayDate)} //</div>
-                                </div>
-                                <span class="status-badge ${track.isPublic ? 'badge-public' : 'badge-private'}">
-                                    <span class="status-indicator"></span>
-                                    ${track.isPublic ? 'Public' : 'Restricted'}
-                                </span>
-                            </div>
-                            ${track.notes ? `<div class="track-notes">${escapeHtml(track.notes)}</div>` : ''}
-                            <audio controls src="${audioObjectURLs[track.id]}"></audio>
-                        </div>
-                        ${isLoggedIn ? `
-                        <div class="track-actions">
-                            <button class="btn btn-amber" onclick="openEditModal(${track.id})">
-                                Edit
-                            </button>
-                            <button class="btn" onclick="toggleVisibility(${track.id})">
-                                ${track.isPublic ? 'Restrict' : 'Release'}
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteTrack(${track.id})">
-                                Purge
-                            </button>
-                        </div>
-                        ` : ''}
+            return `
+                <div class="track-card">
+                    <div class="cover-wrapper">
+                        ${coverHtml}
                     </div>
-                `;
-            }).join('');
-        }
+                    <div class="track-info">
+                        <div class="track-header">
+                            <div>
+                                <div class="track-title">${escapeHtml(track.title)}</div>
+                                <div class="track-date">// DATE: ${escapeHtml(displayDate)} //</div>
+                            </div>
+                            <span class="status-badge ${track.isPublic ? 'badge-public' : 'badge-private'}">
+                                <span class="status-indicator"></span>
+                                ${track.isPublic ? 'Public' : 'Restricted'}
+                            </span>
+                        </div>
+                        ${track.notes ? `<div class="track-notes">${escapeHtml(track.notes)}</div>` : ''}
+                        <audio controls src="${track.audioSrc}"></audio>
+                    </div>
+                    ${isLoggedIn ? `
+                    <div class="track-actions">
+                        <button class="btn" onclick="toggleVisibility(${track.id})">
+                            ${track.isPublic ? 'Restrict' : 'Release'}
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-        }
-    </script>
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+</script>
 </body>
 </html>
