@@ -638,7 +638,6 @@
     </div>
 
 <script>
-
     // 1. YOUR TRACK MANIFEST (Static Repository Links)
     const vaultTracks = [
         { id: 1, title: "GOSTO DO SABOR", audioSrc: "./audio/GOSTO DO SABOR.mp3", imageSrc: "", trackDate: "2025-09-18", notes: "made by suno ai", isPublic: false },
@@ -693,7 +692,7 @@
             userHash: "4c3b3284e206c3db72440736cfdbd185f0e61a3c7fd9f049987196b987d3d1ee",
             passHash: "4107288f0b60f2a3cad009e8164af48d39ba6855a3388e5e6858364e14c2fdff"
         },
-         guest1: {
+        guest1: {
             userHash: "082e7e546a5b545fd2316e9520afd61b65d5d0a72275763a4820e4906af18aa6",
             passHash: "cb45aae0c5e7f85ff9b17094879fd91d1445ae34aebb75f785a7f3280237d44f"
         },
@@ -705,7 +704,8 @@
 
     let activeFilter = 'all';
     let activeSort = 'date-desc';
-    let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
+    let currentUser = sessionStorage.getItem('vault_auth_user') || null;
+    let isLoggedIn = currentUser !== null;
 
     // Initialize UI on page load
     window.addEventListener('DOMContentLoaded', () => {
@@ -813,7 +813,7 @@
         const privateTab = document.getElementById('tab-private');
 
         if (isLoggedIn) {
-            userTag.textContent = "// admin: mk //";
+            userTag.textContent = `// user: ${currentUser} //`;
             authBtn.textContent = "// logout //";
             privateTab.style.display = "block";
         } else {
@@ -828,7 +828,8 @@
 
     function handleAuthAction() {
         if (isLoggedIn) {
-            sessionStorage.removeItem('vault_auth');
+            sessionStorage.removeItem('vault_auth_user');
+            currentUser = null;
             isLoggedIn = false;
             updateAuthStateUI();
             loadAndRender();
@@ -851,8 +852,14 @@
         const userHashed = await sha256(userVal);
         const passHashed = await sha256(passVal);
 
-        if (userHashed === CREDENTIALS.userHash && passHashed === CREDENTIALS.passHash) {
-            sessionStorage.setItem('vault_auth', 'true');
+        const matchedEntry = Object.entries(CREDENTIALS).find(
+            ([role, account]) => account.userHash === userHashed && account.passHash === passHashed
+        );
+
+        if (matchedEntry) {
+            const [roleName] = matchedEntry;
+            sessionStorage.setItem('vault_auth_user', roleName);
+            currentUser = roleName;
             isLoggedIn = true;
             closeLoginModal();
             updateAuthStateUI();
@@ -863,7 +870,7 @@
     });
 
     function toggleVisibility(id) {
-        if (!isLoggedIn) return;
+        if (!isLoggedIn || currentUser !== 'admin') return;
         const track = vaultTracks.find(t => t.id === id);
         if (track) {
             track.isPublic = !track.isPublic;
@@ -933,6 +940,8 @@
             return;
         }
 
+        const isAdmin = currentUser === 'admin';
+
         trackList.innerHTML = sorted.map(track => {
             let coverHtml = `<div class="track-cover-placeholder">// NO_ARTWORK //</div>`;
             if (track.imageSrc) {
@@ -960,7 +969,7 @@
                         ${track.notes ? `<div class="track-notes">${escapeHtml(track.notes)}</div>` : ''}
                         <audio controls src="${track.audioSrc}"></audio>
                     </div>
-                    ${isLoggedIn ? `
+                    ${isAdmin ? `
                     <div class="track-actions">
                         <button class="btn" onclick="toggleVisibility(${track.id})">
                             ${track.isPublic ? 'Restrict' : 'Release'}
