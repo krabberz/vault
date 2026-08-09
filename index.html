@@ -119,6 +119,18 @@
             color: var(--cyan-accent);
         }
 
+        .btn-amber {
+            border-color: var(--amber-accent);
+            color: var(--amber-accent);
+        }
+
+        .btn-amber:hover {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--amber-accent);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(255, 153, 0, 0.3);
+        }
+
         .btn-danger {
             border-color: var(--danger-red);
             color: var(--danger-red);
@@ -141,6 +153,15 @@
 
         .upload-section.active { display: block; }
 
+        .form-row {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
         .form-group { margin-bottom: 1.2rem; }
 
         label {
@@ -152,7 +173,7 @@
             text-transform: uppercase;
         }
 
-        input[type="text"], input[type="password"], input[type="file"] {
+        input[type="text"], input[type="password"], input[type="file"], input[type="date"], textarea {
             width: 100%;
             padding: 0.75rem;
             background: var(--bg-void);
@@ -163,7 +184,17 @@
             outline: none;
         }
 
-        input[type="text"]:focus, input[type="password"]:focus {
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+            cursor: pointer;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, textarea:focus {
             border-color: var(--cyan-accent);
             box-shadow: 0 0 8px var(--cyan-glow);
         }
@@ -208,6 +239,10 @@
             .track-grid {
                 grid-template-columns: 1fr;
             }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
 
         .track-card {
@@ -216,7 +251,7 @@
             padding: 1.2rem;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1rem;
             justify-content: space-between;
         }
 
@@ -272,6 +307,24 @@
             word-break: break-word;
         }
 
+        .track-date {
+            font-size: 0.7rem;
+            color: var(--cyan-accent);
+            letter-spacing: 1px;
+            margin-top: -0.2rem;
+        }
+
+        .track-notes {
+            font-size: 0.75rem;
+            color: var(--silver-main);
+            background: rgba(5, 6, 8, 0.6);
+            border-left: 2px solid var(--panel-border);
+            padding: 0.5rem 0.75rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
         .status-badge {
             font-size: 0.65rem;
             padding: 0.2rem 0.6rem;
@@ -312,7 +365,7 @@
         audio {
             width: 100%;
             height: 32px;
-            margin-top: 0.4rem;
+            margin-top: 0.2rem;
             filter: invert(0.9) hue-rotate(180deg);
         }
 
@@ -324,7 +377,7 @@
 
         .track-actions .btn {
             flex: 1;
-            padding: 0.4rem 0.8rem;
+            padding: 0.4rem 0.6rem;
             font-size: 0.75rem;
             text-align: center;
         }
@@ -360,7 +413,7 @@
             border: 1px solid var(--panel-border);
             padding: 2rem;
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
@@ -377,6 +430,12 @@
             font-size: 0.75rem;
             margin-top: 0.5rem;
             display: none;
+        }
+
+        .file-hint {
+            font-size: 0.7rem;
+            color: var(--silver-dim);
+            margin-top: 0.3rem;
         }
     </style>
 </head>
@@ -395,9 +454,15 @@
 
     <section id="uploadDrawer" class="upload-section">
         <form id="trackForm">
-            <div class="form-group">
-                <label for="title">// track title // identifier //</label>
-                <input type="text" id="title" placeholder="e.g., UNIT_02_AUDIO_DEMO" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="title">// track title // identifier //</label>
+                    <input type="text" id="title" placeholder="e.g., UNIT_02_AUDIO_DEMO" required>
+                </div>
+                <div class="form-group">
+                    <label for="trackDate">// creation date (optional) //</label>
+                    <input type="date" id="trackDate">
+                </div>
             </div>
             <div class="form-group">
                 <label for="audioFile">// audio file //</label>
@@ -406,6 +471,10 @@
             <div class="form-group">
                 <label for="imageFile">// cover image (optional) //</label>
                 <input type="file" id="imageFile" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="trackNotes">// notes // production log (optional) //</label>
+                <textarea id="trackNotes" placeholder="e.g., BPM: 128 | DAW: Ableton | Key: Bm"></textarea>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 0.8rem;">
                 <button type="button" class="btn" onclick="toggleUploadDrawer()">// cancel //</button>
@@ -423,6 +492,7 @@
     <main id="trackList" class="track-grid">
     </main>
 
+    <!-- Login Modal -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal">
             <h2 class="modal-title">// AUTHENTICATE //</h2>
@@ -439,6 +509,44 @@
                 <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem;">
                     <button type="button" class="btn" onclick="closeLoginModal()">// cancel //</button>
                     <button type="submit" class="btn btn-cyan">// verify //</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Track Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <h2 class="modal-title">// EDIT TRACK ENTRY //</h2>
+            <form id="editForm">
+                <input type="hidden" id="editTrackId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editTitle">// title //</label>
+                        <input type="text" id="editTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTrackDate">// date //</label>
+                        <input type="date" id="editTrackDate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editAudioFile">// replace audio (optional) //</label>
+                    <input type="file" id="editAudioFile" accept="audio/*">
+                    <div class="file-hint">// leave empty to keep current audio file //</div>
+                </div>
+                <div class="form-group">
+                    <label for="editImageFile">// replace artwork (optional) //</label>
+                    <input type="file" id="editImageFile" accept="image/*">
+                    <div class="file-hint">// leave empty to keep current artwork //</div>
+                </div>
+                <div class="form-group">
+                    <label for="editNotes">// notes // production log //</label>
+                    <textarea id="editNotes"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn" onclick="closeEditModal()">// cancel //</button>
+                    <button type="submit" class="btn btn-amber">// save changes //</button>
                 </div>
             </form>
         </div>
@@ -545,6 +653,8 @@
             if (!isLoggedIn) return;
 
             const title = document.getElementById('title').value;
+            const customDate = document.getElementById('trackDate').value;
+            const notes = document.getElementById('trackNotes').value;
             const audioFileInput = document.getElementById('audioFile');
             const imageFileInput = document.getElementById('imageFile');
             
@@ -556,6 +666,8 @@
             const newTrack = {
                 id: Date.now(),
                 title: title,
+                trackDate: customDate || new Date().toISOString().split('T')[0],
+                notes: notes || '',
                 fileBlob: audioFile,
                 imageBlob: imageFile,
                 isPublic: false,
@@ -569,6 +681,82 @@
             tx.oncomplete = () => {
                 document.getElementById('trackForm').reset();
                 toggleUploadDrawer();
+                loadAndRender();
+            };
+        });
+
+        /* --- EDIT TRACK LOGIC --- */
+
+        function openEditModal(id) {
+            if (!isLoggedIn) return;
+
+            const tx = db.transaction("tracks", "readonly");
+            const store = tx.objectStore("tracks");
+            const getReq = store.get(id);
+
+            getReq.onsuccess = () => {
+                const track = getReq.result;
+                if (track) {
+                    document.getElementById('editTrackId').value = track.id;
+                    document.getElementById('editTitle').value = track.title || '';
+                    document.getElementById('editTrackDate').value = track.trackDate || '';
+                    document.getElementById('editNotes').value = track.notes || '';
+                    document.getElementById('editAudioFile').value = '';
+                    document.getElementById('editImageFile').value = '';
+
+                    document.getElementById('editModal').classList.add('active');
+                }
+            };
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            document.getElementById('editForm').reset();
+        }
+
+        document.getElementById('editForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isLoggedIn) return;
+
+            const trackId = parseInt(document.getElementById('editTrackId').value, 10);
+            if (!trackId) return;
+
+            const tx = db.transaction("tracks", "readwrite");
+            const store = tx.objectStore("tracks");
+            const getReq = store.get(trackId);
+
+            getReq.onsuccess = () => {
+                const track = getReq.result;
+                if (!track) return;
+
+                track.title = document.getElementById('editTitle').value;
+                track.trackDate = document.getElementById('editTrackDate').value || new Date().toISOString().split('T')[0];
+                track.notes = document.getElementById('editNotes').value;
+
+                const newAudio = document.getElementById('editAudioFile').files[0];
+                const newImage = document.getElementById('editImageFile').files[0];
+
+                if (newAudio) {
+                    track.fileBlob = newAudio;
+                    if (audioObjectURLs[trackId]) {
+                        URL.revokeObjectURL(audioObjectURLs[trackId]);
+                        delete audioObjectURLs[trackId];
+                    }
+                }
+
+                if (newImage) {
+                    track.imageBlob = newImage;
+                    if (imageObjectURLs[trackId]) {
+                        URL.revokeObjectURL(imageObjectURLs[trackId]);
+                        delete imageObjectURLs[trackId];
+                    }
+                }
+
+                store.put(track);
+            };
+
+            tx.oncomplete = () => {
+                closeEditModal();
                 loadAndRender();
             };
         });
@@ -672,6 +860,8 @@
                     coverHtml = `<img src="${imageObjectURLs[track.id]}" class="track-cover" alt="Cover Art">`;
                 }
 
+                const displayDate = track.trackDate || track.timestamp;
+
                 return `
                     <div class="track-card">
                         <div class="cover-wrapper">
@@ -679,16 +869,23 @@
                         </div>
                         <div class="track-info">
                             <div class="track-header">
-                                <span class="track-title">${escapeHtml(track.title)}</span>
+                                <div>
+                                    <div class="track-title">${escapeHtml(track.title)}</div>
+                                    <div class="track-date">// DATE: ${escapeHtml(displayDate)} //</div>
+                                </div>
                                 <span class="status-badge ${track.isPublic ? 'badge-public' : 'badge-private'}">
                                     <span class="status-indicator"></span>
                                     ${track.isPublic ? 'Public' : 'Restricted'}
                                 </span>
                             </div>
+                            ${track.notes ? `<div class="track-notes">${escapeHtml(track.notes)}</div>` : ''}
                             <audio controls src="${audioObjectURLs[track.id]}"></audio>
                         </div>
                         ${isLoggedIn ? `
                         <div class="track-actions">
+                            <button class="btn btn-amber" onclick="openEditModal(${track.id})">
+                                Edit
+                            </button>
                             <button class="btn" onclick="toggleVisibility(${track.id})">
                                 ${track.isPublic ? 'Restrict' : 'Release'}
                             </button>
