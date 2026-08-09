@@ -173,7 +173,7 @@
             text-transform: uppercase;
         }
 
-        input[type="text"], input[type="password"], input[type="file"], input[type="date"], textarea {
+        input[type="text"], input[type="password"], input[type="file"], input[type="date"], select, textarea {
             width: 100%;
             padding: 0.75rem;
             background: var(--bg-void);
@@ -194,16 +194,24 @@
             cursor: pointer;
         }
 
-        input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
             border-color: var(--cyan-accent);
             box-shadow: 0 0 8px var(--cyan-glow);
         }
 
         .controls {
             display: flex;
-            gap: 0.5rem;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--panel-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
         }
 
         .tab {
@@ -228,6 +236,28 @@
             background: rgba(0, 240, 255, 0.03);
         }
 
+        .sort-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding-bottom: 0.4rem;
+        }
+
+        .sort-wrapper label {
+            margin-bottom: 0;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .sort-select {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: auto;
+            border-color: var(--panel-border);
+        }
+
         /* 2-column grid layout */
         .track-grid {
             display: grid;
@@ -242,6 +272,10 @@
             .form-row {
                 flex-direction: column;
                 gap: 0;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
@@ -484,9 +518,20 @@
     </section>
 
     <div class="controls">
-        <button id="tab-all" class="tab active" onclick="setFilter('all')">// all // (<span id="count-all">0</span>)</button>
-        <button id="tab-public" class="tab" onclick="setFilter('public')">// public // (<span id="count-public">0</span>)</button>
-        <button id="tab-private" class="tab" onclick="setFilter('private')" style="display: none;">// private // (<span id="count-private">0</span>)</button>
+        <div class="tabs">
+            <button id="tab-all" class="tab active" onclick="setFilter('all')">// all // (<span id="count-all">0</span>)</button>
+            <button id="tab-public" class="tab" onclick="setFilter('public')">// public // (<span id="count-public">0</span>)</button>
+            <button id="tab-private" class="tab" onclick="setFilter('private')" style="display: none;">// private // (<span id="count-private">0</span>)</button>
+        </div>
+        <div class="sort-wrapper">
+            <label for="sortSelect">// sort by //</label>
+            <select id="sortSelect" class="sort-select" onchange="setSort(this.value)">
+                <option value="date-desc">Date (Newest First)</option>
+                <option value="date-asc">Date (Oldest First)</option>
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+            </select>
+        </div>
     </div>
 
     <main id="trackList" class="track-grid">
@@ -560,6 +605,7 @@
 
         let db;
         let activeFilter = 'all';
+        let activeSort = 'date-desc';
         let audioObjectURLs = {};
         let imageObjectURLs = {};
         let isLoggedIn = sessionStorage.getItem('vault_auth') === 'true';
@@ -685,8 +731,6 @@
             };
         });
 
-        /* --- EDIT TRACK LOGIC --- */
-
         function openEditModal(id) {
             if (!isLoggedIn) return;
 
@@ -809,6 +853,11 @@
             loadAndRender();
         }
 
+        function setSort(sortOption) {
+            activeSort = sortOption;
+            loadAndRender();
+        }
+
         function updateTabStyles() {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`tab-${activeFilter}`).classList.add('active');
@@ -819,12 +868,33 @@
 
             const tx = db.transaction("tracks", "readonly");
             const store = tx.objectStore("tracks");
-            getAllReq = store.getAll();
+            const getAllReq = store.getAll();
 
             getAllReq.onsuccess = () => {
                 const tracks = getAllReq.result || [];
                 renderUI(tracks);
             };
+        }
+
+        function sortTracks(tracks, sortMode) {
+            return tracks.sort((a, b) => {
+                const titleA = (a.title || '').toLowerCase();
+                const titleB = (b.title || '').toLowerCase();
+                const dateA = a.trackDate || a.timestamp || '';
+                const dateB = b.trackDate || b.timestamp || '';
+
+                switch (sortMode) {
+                    case 'name-asc':
+                        return titleA.localeCompare(titleB);
+                    case 'name-desc':
+                        return titleB.localeCompare(titleA);
+                    case 'date-asc':
+                        return dateA.localeCompare(dateB) || a.id - b.id;
+                    case 'date-desc':
+                    default:
+                        return dateB.localeCompare(dateA) || b.id - a.id;
+                }
+            });
         }
 
         function renderUI(tracks) {
@@ -840,14 +910,15 @@
                 return true;
             });
 
+            const sorted = sortTracks(filtered, activeSort);
             const trackList = document.getElementById('trackList');
 
-            if (filtered.length === 0) {
+            if (sorted.length === 0) {
                 trackList.innerHTML = `<div class="empty-state">// NO DATA DETECTED IN THIS INDEX //</div>`;
                 return;
             }
 
-            trackList.innerHTML = filtered.map(track => {
+            trackList.innerHTML = sorted.map(track => {
                 if (!audioObjectURLs[track.id]) {
                     audioObjectURLs[track.id] = URL.createObjectURL(track.fileBlob);
                 }
